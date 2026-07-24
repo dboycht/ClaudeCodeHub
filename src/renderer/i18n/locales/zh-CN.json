@@ -1,0 +1,152 @@
+{
+  "app": {
+    "title": "ClaudeCode Hub",
+    "version": "版本"
+  },
+  "sidebar": {
+    "search": "搜索对话...",
+    "allConversations": "全部对话",
+    "favorites": "收藏夹",
+    "projects": "项目",
+    "tags": "标签",
+    "themes": "主题",
+    "language": "语言",
+    "actions": "操作",
+    "backupAll": "全部备份",
+    "importData": "导入",
+    "refresh": "刷新",
+    "about": "关于",
+    "noProjects": "暂无项目"
+  },
+  "conversation": {
+    "rename": "重命名",
+    "delete": "删除",
+    "export": "导出",
+    "backup": "备份",
+    "star": "切换收藏",
+    "messages": "条消息",
+    "noConversations": "未找到对话",
+    "confirmDelete": "确定要删除此对话吗？",
+    "confirmDeleteDesc": "此操作会将对话文件移至回收站，你可以从回收站恢复。",
+    "cantUndo": "此操作不可撤销",
+    "selectToView": "选择一个对话查看详情",
+    "created": "创建时间",
+    "updated": "更新时间",
+    "size": "大小",
+    "project": "项目",
+    "messageCount": "消息数",
+    "firstMessage": "首条消息",
+    "preview": "预览",
+    "actions": "操作",
+    "details": "详情",
+    "selected": "已选 {{count}} 项",
+    "selectAll": "全选",
+    "clearSelection": "清除选择",
+    "batchDelete": "删除选中",
+    "batchExport": "导出选中",
+    "batchTag": "批量标记",
+    "removeColor": "清除颜色",
+    "loading": "加载中...",
+    "noMessages": "无消息可显示",
+    "noFileOnDisk": "磁盘上未找到会话文件",
+    "tryClearFilter": "尝试清除过滤条件",
+    "noDetail": "未选择对话",
+    "noDetailDesc": "点击列表中的对话查看详情",
+    "showAllMessages": "显示全部 {{count}} 条消息",
+    "collapseMessages": "显示全部 {{count}} 条消息 — 点击收起"
+  },
+  "batch": {
+    "selectedCount": "已选 {{count}} 项 —",
+    "export": "导出",
+    "delete": "删除",
+    "confirmDelete": "确定删除 {{count}} 个对话？",
+    "deleted": "已删除 {{count}} 个对话",
+    "exported": "已导出 {{count}} 个对话至",
+    "tagged": "已标记 {{count}} 个对话"
+  },
+  "dialog": {
+    "rename": {
+      "title": "重命名对话",
+      "label": "新名称",
+      "placeholder": "输入自定义名称...",
+      "save": "保存",
+      "cancel": "取消"
+    },
+    "delete": {
+      "title": "删除对话",
+      "confirm": "删除",
+      "cancel": "取消"
+    },
+    "export": {
+      "title": "导出对话",
+      "format": "导出格式",
+      "json": "JSON (原始格式)",
+      "markdown": "Markdown (可读格式)",
+      "html": "HTML (带样式)",
+      "export": "导出",
+      "cancel": "取消",
+      "success": "对话导出成功！",
+      "failed": "导出失败"
+    },
+    "import": {
+      "title": "导入对话",
+      "selectFiles": "选择文件",
+      "dragDrop": "拖放 .jsonl 文件或备份文件夹到此处",
+      "import": "导入",
+      "cancel": "取消",
+      "success": "成功导入 {{count}} 个对话",
+      "failed": "导入失败",
+      "skipped": "跳过 {{count}} 个文件"
+    },
+    "backup": {
+      "title": "备份对话",
+      "selectDir": "选择备份目录",
+      "backup": "备份",
+      "cancel": "取消",
+      "all": "全部对话",
+      "selected": "仅选中对话",
+      "noSelection": "未选择任何对话",
+      "success": "备份完成！{{count}} 个文件保存至 {{path}}",
+      "failed": "备份失败"
+    },
+    "settings": {
+      "title": "设置",
+      "theme": "配色主题",
+      "language": "语言",
+      "close": "关闭"
+    },
+    "about": {
+      "title": "关于 ClaudeCode Hub",
+      "version": "版本 1.00.1",
+      "author": "作者：dboycht",
+      "repo": "项目地址",
+      "description": "一个 Windows 11 风格的桌面应用，用于管理 Claude Code 对话记录。支持重命名、删除、备份、导出、导入以及颜色标签分类。",
+      "close": "关闭"
+    }
+  },
+  "status": {
+    "totalConversations": "{{count}} 个对话",
+    "totalProjects": "{{count}} 个项目",
+    "totalSize": "共 {{size}}",
+    "loaded": "就绪",
+    "loading": "加载中..."
+  },
+  "common": {
+    "ok": "确定",
+    "cancel": "取消",
+    "close": "关闭",
+    "save": "保存",
+    "delete": "删除",
+    "export": "导出",
+    "search": "搜索...",
+    "noResults": "无结果",
+    "error": "错误",
+    "success": "成功",
+    "confirm": "确认"
+  },
+  "theme": {
+    "light": "浅色",
+    "dark": "暗色",
+    "system": "跟随系统"
+  }
+}

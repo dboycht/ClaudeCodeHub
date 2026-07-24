@@ -1,0 +1,63 @@
+{
+  "name": "claudecode-hub",
+  "version": "1.0.1",
+  "description": "ClaudeCode Hub - A Windows 11-styled desktop app for managing Claude Code conversations",
+  "main": "dist/main/index.js",
+  "author": "Claude Code Manager",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && tsc -p tsconfig.main.json",
+    "build:electron": "npm run build && electron-builder",
+    "preview": "vite preview",
+    "start": "electron ."
+  },
+  "dependencies": {
+    "i18next": "^24.2.0",
+    "lucide-react": "^0.460.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^15.1.0",
+    "react-window": "^1.8.10",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/react-window": "^1.8.8",
+    "@vitejs/plugin-react": "^4.3.0",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.0.0",
+    "vite-plugin-electron": "^0.28.0",
+    "vite-plugin-electron-renderer": "^0.14.0"
+  },
+  "build": {
+    "appId": "com.claudecodemanager.app",
+    "productName": "Claude Code Manager",
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "resources/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "resources/icon.ico",
+      "uninstallerIcon": "resources/icon.ico",
+      "installerHeaderIcon": "resources/icon.ico"
+    },
+    "files": [
+      "dist/**/*",
+      "resources/**/*"
+    ]
+  }
+}

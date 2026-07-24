@@ -1,0 +1,152 @@
+{
+  "app": {
+    "title": "ClaudeCode Hub",
+    "version": "Version"
+  },
+  "sidebar": {
+    "search": "Search conversations...",
+    "allConversations": "All Conversations",
+    "favorites": "Favorites",
+    "projects": "Projects",
+    "tags": "Tags",
+    "themes": "Themes",
+    "language": "Language",
+    "actions": "Actions",
+    "backupAll": "Backup All",
+    "importData": "Import",
+    "refresh": "Refresh",
+    "about": "About",
+    "noProjects": "No projects yet"
+  },
+  "conversation": {
+    "rename": "Rename",
+    "delete": "Delete",
+    "export": "Export",
+    "backup": "Backup",
+    "star": "Toggle Favorite",
+    "messages": "messages",
+    "noConversations": "No conversations found",
+    "confirmDelete": "Are you sure you want to delete this conversation?",
+    "confirmDeleteDesc": "This will move the conversation file to the trash and can be restored.",
+    "cantUndo": "This action cannot be undone",
+    "selectToView": "Select a conversation to view details",
+    "created": "Created",
+    "updated": "Updated",
+    "size": "Size",
+    "project": "Project",
+    "messageCount": "Messages",
+    "firstMessage": "First Message",
+    "preview": "Preview",
+    "actions": "Actions",
+    "details": "Details",
+    "selected": "{{count}} selected",
+    "selectAll": "Select All",
+    "clearSelection": "Clear selection",
+    "batchDelete": "Delete selected",
+    "batchExport": "Export selected",
+    "batchTag": "Batch tag",
+    "removeColor": "Remove color",
+    "loading": "Loading...",
+    "noMessages": "No messages to display",
+    "noFileOnDisk": "Session file not found on disk",
+    "tryClearFilter": "Try clearing filters",
+    "noDetail": "No conversation selected",
+    "noDetailDesc": "Click on a conversation in the list to see its details here",
+    "showAllMessages": "Show all {{count}} messages",
+    "collapseMessages": "Showing all {{count}} messages — click to collapse"
+  },
+  "batch": {
+    "selectedCount": "{{count}} selected —",
+    "export": "Export",
+    "delete": "Delete",
+    "confirmDelete": "Delete {{count}} conversation(s)?",
+    "deleted": "Deleted {{count}} conversation(s)",
+    "exported": "Exported {{count}} conversation(s) to",
+    "tagged": "Tagged {{count}} conversation(s)"
+  },
+  "dialog": {
+    "rename": {
+      "title": "Rename Conversation",
+      "label": "New Name",
+      "placeholder": "Enter a custom name...",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "delete": {
+      "title": "Delete Conversation",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "export": {
+      "title": "Export Conversation",
+      "format": "Export Format",
+      "json": "JSON (Original)",
+      "markdown": "Markdown (Readable)",
+      "html": "HTML (Styled)",
+      "export": "Export",
+      "cancel": "Cancel",
+      "success": "Conversation exported successfully!",
+      "failed": "Export failed"
+    },
+    "import": {
+      "title": "Import Conversations",
+      "selectFiles": "Select Files",
+      "dragDrop": "Drag & drop .jsonl files or backup folders here",
+      "import": "Import",
+      "cancel": "Cancel",
+      "success": "Successfully imported {{count}} conversation(s)",
+      "failed": "Import failed",
+      "skipped": "{{count}} file(s) skipped"
+    },
+    "backup": {
+      "title": "Backup Conversations",
+      "selectDir": "Select backup directory",
+      "backup": "Backup",
+      "cancel": "Cancel",
+      "all": "All conversations",
+      "selected": "Selected conversations only",
+      "noSelection": "No conversations selected",
+      "success": "Backup completed! {{count}} files saved to {{path}}",
+      "failed": "Backup failed"
+    },
+    "settings": {
+      "title": "Settings",
+      "theme": "Color Theme",
+      "language": "Language",
+      "close": "Close"
+    },
+    "about": {
+      "title": "About ClaudeCode Hub",
+      "version": "Version 1.00.1",
+      "author": "Author: dboycht",
+      "repo": "Repository",
+      "description": "A Windows 11-styled desktop app for managing Claude Code conversations. Features include rename, delete, backup, export, import, and color tag categorization.",
+      "close": "Close"
+    }
+  },
+  "status": {
+    "totalConversations": "{{count}} conversations",
+    "totalProjects": "{{count}} projects",
+    "totalSize": "{{size}} total",
+    "loaded": "Ready",
+    "loading": "Loading..."
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "delete": "Delete",
+    "export": "Export",
+    "search": "Search...",
+    "noResults": "No results",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  }
+}
