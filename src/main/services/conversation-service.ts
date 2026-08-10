@@ -81,6 +81,8 @@ export class ConversationService {
       const formattedMessages: Array<{ role: string; content: string; timestamp: string }> = [];
 
       for (const msg of rawMessages) {
+        // Skip skill injections / system context (marked isMeta)
+        if ((msg as any).isMeta === true) continue;
         if (msg.type === 'user' || msg.type === 'assistant' || msg.type === 'message') {
           let content = '';
           const rawContent = msg.message?.content;

@@ -4,7 +4,7 @@
 
 **作者**: [dboycht](https://github.com/dboycht)  
 **仓库**: [github.com/dboycht/ClaudeCodeHub](https://github.com/dboycht/ClaudeCodeHub)  
-**版本**: 1.00.1
+**版本**: 1.00.2
 
 ---
 
@@ -76,6 +76,16 @@ npm start
 ---
 
 ## 📝 更新日志
+
+### v1.00.2 (2026-08-10)
+- ✨ 新增：中文版管理脚本 `manage.bat`（编译 / 打包 / 生成 GitHub / 清理缓存）
+- 🔧 修复：导出功能（Markdown / JSON / HTML）无法生成文件
+  - 原因：`content` 字段为字符串时 `.map()` 崩溃
+  - 修复：支持字符串和数组两种消息格式，HTML 导出增加转义
+- 🔧 修复：删除对话后列表不立即刷新
+  - 原因：`shell.trashItem` 异步未等待，刷新时文件仍存在
+  - 修复：等待回收站操作完成后再刷新列表
+- 🔧 修复：软件图标改用 `resources/icon.ico`
 
 ### v1.00.1 (2026-07-24)
 - ✨ 新增：关于对话框（作者、项目地址、版本信息）

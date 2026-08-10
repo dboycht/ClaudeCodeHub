@@ -419,20 +419,22 @@ export class FileService {
 
   // ===== CRUD operations =====
 
-  deleteSessionFile(sessionId: string): boolean {
+  async deleteSessionFile(sessionId: string): Promise<boolean> {
     const filePath = this.getSessionFilePath(sessionId);
     if (!filePath) return false;
 
     try {
       const { shell } = require('electron');
-      shell.trashItem(filePath).catch(() => {
+
+      // Move to trash and AWAIT completion, so list refresh sees the file gone
+      await shell.trashItem(filePath).catch(() => {
         fs.rmSync(filePath, { recursive: true, force: true });
       });
 
       // Also remove session directory if exists
       const dirPath = filePath.replace(/\.jsonl$/, '');
       if (fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory()) {
-        shell.trashItem(dirPath).catch(() => {
+        await shell.trashItem(dirPath).catch(() => {
           fs.rmSync(dirPath, { recursive: true, force: true });
         });
       }
@@ -443,7 +445,8 @@ export class FileService {
       this.saveMetadata(store);
 
       return true;
-    } catch {
+    } catch (err) {
+      console.error('[FileService] Delete failed:', err);
       return false;
     }
   }

@@ -200,21 +200,87 @@ export class BackupService {
     }
   }
 
+  /**
+   * Extract text from a message, handling both string and array content formats
+   */
+  private extractText(msg: SessionMessage): string {
+    const content = msg.message?.content as any;
+    if (typeof content === 'string') {
+      return content.trim();
+    }
+    if (Array.isArray(content)) {
+      return content
+        .filter((c: any) => c && c.type === 'text' && c.text)
+        .map((c: any) => c.text)
+        .join('\n')
+        .trim();
+    }
+    return '';
+  }
+
+  /**
+   * Determine if a message should appear in exports.
+   * Skips: meta/skill injections, system context, empty content (thinking/tool blocks)
+   */
+  private isExportable(msg: SessionMessage): boolean {
+    // Skip skill injections & system context (marked isMeta)
+    if ((msg as any).isMeta === true) return false;
+    // Skip non-conversation types
+    if (msg.type !== 'user' && msg.type !== 'assistant' && msg.type !== 'message') return false;
+    // Skip empty messages (thinking-only, tool_use/tool_result, blank user echoes)
+    return this.extractText(msg).length > 0;
+  }
+
+  /**
+   * Clean the message stream for export:
+   * 1. Filter out meta/empty messages
+   * 2. Merge consecutive same-role messages into one block (streaming chunks)
+   */
+  private cleanMessages(messages: SessionMessage[]): Array<{ role: string; text: string; timestamp: string }> {
+    const result: Array<{ role: string; text: string; timestamp: string }> = [];
+
+    for (const msg of messages) {
+      if (!this.isExportable(msg)) continue;
+
+      const role = msg.type === 'assistant' ? 'assistant' : 'user';
+      const text = this.extractText(msg);
+      const timestamp = msg.timestamp || '';
+
+      const last = result[result.length - 1];
+      // Merge consecutive messages of the same role (streaming chunks of one reply)
+      if (last && last.role === role) {
+        last.text += '\n\n' + text;
+        if (!last.timestamp) last.timestamp = timestamp;
+      } else {
+        result.push({ role, text, timestamp });
+      }
+    }
+
+    return result;
+  }
+
+  private escapeHtml(text: string): string {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
   private formatMessages(messages: SessionMessage[], format: 'json' | 'markdown' | 'html'): string {
-    const filtered = messages.filter(m => m.type === 'user' || m.type === 'assistant');
+    const cleaned = this.cleanMessages(messages);
 
     switch (format) {
       case 'json':
-        return JSON.stringify(filtered, null, 2);
+        return JSON.stringify(cleaned, null, 2);
 
       case 'markdown': {
         let md = '# Claude Code Conversation\n\n';
         md += `Exported: ${new Date().toISOString()}\n\n---\n\n`;
-        for (const msg of filtered) {
-          const role = msg.type === 'user' ? '🧑 **You**' : '🤖 **Claude**';
-          const text = msg.message?.content?.map(c => c.text || '').join('\n') || '';
+        for (const msg of cleaned) {
+          const role = msg.role === 'user' ? '🧑 **You**' : '🤖 **Claude**';
           const time = msg.timestamp ? `*${new Date(msg.timestamp).toLocaleString()}*` : '';
-          md += `### ${role} ${time}\n\n${text}\n\n---\n\n`;
+          md += `### ${role} ${time}\n\n${msg.text}\n\n---\n\n`;
         }
         return md;
       }
@@ -235,11 +301,11 @@ export class BackupService {
 <h1>Claude Code Conversation</h1>
 <p>Exported: ${new Date().toISOString()}</p>
 <hr>`;
-        for (const msg of filtered) {
-          const role = msg.type === 'user' ? 'You' : 'Claude';
-          const text = msg.message?.content?.map(c => c.text || '').join('\n') || '';
+        for (const msg of cleaned) {
+          const role = msg.role === 'user' ? 'You' : 'Claude';
+          const text = this.escapeHtml(msg.text);
           const time = msg.timestamp ? new Date(msg.timestamp).toLocaleString() : '';
-          html += `<div class="msg ${msg.type}">
+          html += `<div class="msg ${msg.role}">
   <div class="role">${role}<span class="time">${time}</span></div>
   <div>${text.replace(/\n/g, '<br>')}</div>
 </div>\n`;

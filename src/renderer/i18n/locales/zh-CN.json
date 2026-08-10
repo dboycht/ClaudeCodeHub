@@ -117,7 +117,7 @@
     },
     "about": {
       "title": "关于 ClaudeCode Hub",
-      "version": "版本 1.00.1",
+      "version": "版本 1.00.2",
       "author": "作者：dboycht",
       "repo": "项目地址",
       "description": "一个 Windows 11 风格的桌面应用，用于管理 Claude Code 对话记录。支持重命名、删除、备份、导出、导入以及颜色标签分类。",

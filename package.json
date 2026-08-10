@@ -1,6 +1,6 @@
 {
   "name": "claudecode-hub",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ClaudeCode Hub - A Windows 11-styled desktop app for managing Claude Code conversations",
   "main": "dist/main/index.js",
   "author": "Claude Code Manager",
@@ -34,8 +34,8 @@
     "vite-plugin-electron-renderer": "^0.14.0"
   },
   "build": {
-    "appId": "com.claudecodemanager.app",
-    "productName": "Claude Code Manager",
+    "appId": "com.dboycht.claudecodehub",
+    "productName": "ClaudeCode Hub",
     "directories": {
       "output": "release"
     },
@@ -46,7 +46,8 @@
           "arch": ["x64"]
         }
       ],
-      "icon": "resources/icon.png"
+      "icon": "resources/icon.ico",
+      "signAndEditExecutable": false
     },
     "nsis": {
       "oneClick": false,
