@@ -136,6 +136,7 @@ mkdir "%gh%" 2>nul
 echo ¸´ÖÆ src/ Óë resources/ ...
 robocopy "%~dp0src" "%gh%\src" /E /NFL /NDL /NJH /NJS >nul 2>&1
 robocopy "%~dp0resources" "%gh%\resources" /E /NFL /NDL /NJH /NJS >nul 2>&1
+robocopy "%~dp0.vscode" "%gh%\.vscode" /E /NFL /NDL /NJH /NJS >nul 2>&1
 
 for %%f in (package.json package-lock.json tsconfig.json tsconfig.main.json vite.config.ts index.html README.md manage.bat) do (
     if exist "%~dp0%%f" copy /Y "%~dp0%%f" "%gh%\" >nul 2>&1
@@ -198,6 +199,7 @@ if exist "%gh%" rd /s /q "%gh%" 2>nul
 mkdir "%gh%" 2>nul
 robocopy "%~dp0src" "%gh%\src" /E /NFL /NDL /NJH /NJS >nul 2>&1
 robocopy "%~dp0resources" "%gh%\resources" /E /NFL /NDL /NJH /NJS >nul 2>&1
+robocopy "%~dp0.vscode" "%gh%\.vscode" /E /NFL /NDL /NJH /NJS >nul 2>&1
 for %%f in (package.json package-lock.json tsconfig.json tsconfig.main.json vite.config.ts index.html README.md manage.bat) do (
     if exist "%~dp0%%f" copy /Y "%~dp0%%f" "%gh%\" >nul 2>&1
 )

@@ -1,0 +1,8 @@
+{
+  // .bat 文件使用 GBK (cp936) 编码 — cmd.exe 中文 Windows 的标准编码，
+  // 这样 IDE 显示与命令行执行都正确（乱码即意味着缺少此项配置）
+  "[bat]": {
+    "files.encoding": "gb18030",
+    "files.eol": "\r\n"
+  }
+}
