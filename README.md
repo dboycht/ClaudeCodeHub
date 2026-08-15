@@ -4,7 +4,7 @@
 
 **作者**: [dboycht](https://github.com/dboycht)  
 **仓库**: [github.com/dboycht/ClaudeCodeHub](https://github.com/dboycht/ClaudeCodeHub)  
-**版本**: 1.00.2
+**版本**: 1.00.3
 
 ---
 

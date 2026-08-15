@@ -3,3 +3,6 @@ dist/
 release/
 .claude/
 *.exe
+tools/winCodeSign-2.6.0.7z
+GitHub/
+!tools/winCodeSign/win32/rcedit-x64.exe
