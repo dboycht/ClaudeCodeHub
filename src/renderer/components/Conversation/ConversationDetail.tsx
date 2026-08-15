@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   MessageSquare, Clock, HardDrive, FolderOpen,
   Pencil, Trash2, Download, Star,
-  ClipboardList, Calendar, Tag,
+  ClipboardList, Calendar, Tag, FolderInput,
 } from 'lucide-react';
 import { useConversationStore } from '../../stores/conversation-store';
 import { useSettingsStore } from '../../stores/settings-store';
@@ -134,6 +134,26 @@ export function ConversationDetail({ onRefresh }: ConversationDetailProps) {
     }
   };
 
+  const handleMigrate = async () => {
+    if (!conversation) return;
+    const targetDir = await window.api.dialog.openDir();
+    if (!targetDir) return;
+
+    if (!confirm(`${t('conversation.migrateConfirm')}\n\n"${conversation.project}" → "${targetDir}"`)) return;
+
+    try {
+      const ok = await window.api.conv.migrate(conversation.id, targetDir);
+      if (ok) {
+        addToast({ message: t('conversation.migrateSuccess'), type: 'success' });
+        onRefresh();
+      } else {
+        addToast({ message: t('conversation.migrateFail'), type: 'error' });
+      }
+    } catch {
+      addToast({ message: t('conversation.migrateFail'), type: 'error' });
+    }
+  };
+
   const displayMessages = detail?.messages
     ? (showAll ? detail.messages : detail.messages.slice(0, 20))
     : [];
@@ -188,6 +208,9 @@ export function ConversationDetail({ onRefresh }: ConversationDetailProps) {
           </button>
           <button className="btn btn--ghost btn--sm" onClick={() => setExportOpen(true)}>
             <Download size={13} /> {t('conversation.export')}
+          </button>
+          <button className="btn btn--ghost btn--sm" onClick={handleMigrate} title={t('conversation.migrateTitle')}>
+            <FolderInput size={13} /> {t('conversation.migrate')}
           </button>
           <button className="btn btn--danger btn--sm" onClick={() => setDeleteOpen(true)}>
             <Trash2 size={13} /> {t('conversation.delete')}

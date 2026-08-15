@@ -5,6 +5,8 @@ import { monokai } from './monokai';
 import { nord } from './nord';
 import { solarizedDark } from './solarized-dark';
 import { githubDark } from './github-dark';
+import { highContrastDark } from './high-contrast-dark';
+import { highContrastLight } from './high-contrast-light';
 
 export const themes: Theme[] = [
   jetbrainsDark,
@@ -13,6 +15,8 @@ export const themes: Theme[] = [
   nord,
   solarizedDark,
   githubDark,
+  highContrastDark,
+  highContrastLight,
 ];
 
 export function getThemeById(id: string): Theme {
@@ -24,6 +28,9 @@ export function applyTheme(theme: Theme): void {
   for (const [key, value] of Object.entries(theme.colors)) {
     root.style.setProperty(key, value);
   }
+  // Accessibility themes scale the entire UI (Chromium zoom)
+  const scale = theme.fontScale || 1;
+  document.body.style.zoom = scale === 1 ? '' : String(scale);
   localStorage.setItem('ccm-theme', theme.id);
 }
 

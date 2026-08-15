@@ -13,6 +13,7 @@ const IPC_CHANNELS = {
   CONV_DELETE: 'conv:delete',
   CONV_TOGGLE_STAR: 'conv:toggleStar',
   CONV_SET_COLOR: 'conv:setColor',
+  CONV_MIGRATE: 'conv:migrate',
   CONV_ADD_TAG: 'conv:addTag',
   CONV_REMOVE_TAG: 'conv:removeTag',
   EXPORT_CONV: 'export:conversation',
@@ -88,6 +89,10 @@ function registerIpcHandlers() {
 
   ipcMain.handle(IPC_CHANNELS.CONV_SET_COLOR, async (_e, id: string, color: string | null) => {
     return conversationService.setColor(id, color as any);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.CONV_MIGRATE, async (_e, id: string, targetProject: string) => {
+    return conversationService.migrateConversation(id, targetProject);
   });
 
   ipcMain.handle(IPC_CHANNELS.CONV_ADD_TAG, async (_e, id: string, tag: string) => {

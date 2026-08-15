@@ -374,10 +374,11 @@ export class FileService {
    */
   decodeProjectName(encoded: string): string {
     // Check if Windows-encoded (starts with single letter + "--")
+    // 'D--code-VibeCoding' -> drive 'D', rest '-code-VibeCoding' -> '\code\VibeCoding'
     if (/^[A-Za-z]--/.test(encoded)) {
       const drive = encoded[0];
-      const rest = encoded.slice(2); // skip "D-"
-      return `${drive}:\\${rest.replace(/-/g, '\\')}`;
+      const rest = encoded.slice(2).replace(/-/g, '\\');
+      return `${drive}:${rest}`;
     }
     // Unix-encoded
     return encoded.replace(/^-/, '/').replace(/-/g, '/');
@@ -418,6 +419,150 @@ export class FileService {
   }
 
   // ===== CRUD operations =====
+
+  /**
+   * Migrate a session to a different project directory.
+   * Claude Code indexes sessions by the project's encoded absolute path,
+   * so this: 1) moves the session file to the new slug folder,
+   * 2) rewrites the `cwd` field inside every JSONL line,
+   * 3) syncs history.jsonl + sessions/*.json entries.
+   */
+  async migrateSession(sessionId: string, targetProjectPath: string): Promise<boolean> {
+    const filePath = this.getSessionFilePath(sessionId);
+    if (!filePath) {
+      console.error('[FileService] migrate: session file not found:', sessionId);
+      return false;
+    }
+
+    try {
+      // Normalize target: strip trailing separators
+      const target = targetProjectPath.replace(/[\\/]+$/, '');
+      const oldSlug = path.basename(path.dirname(filePath));
+      // Prefer the ACTUAL cwd recorded in the session file — slug decoding is
+      // lossy for paths containing real hyphens (e.g. "Project-B")
+      const oldProjectPath = this.findActualCwd(filePath) || this.decodeProjectName(oldSlug);
+      const newSlug = this.encodeProjectName(target);
+
+      if (oldSlug === newSlug) {
+        console.log('[FileService] migrate: same project, nothing to do');
+        return true;
+      }
+
+      const projectsDir = path.join(this.claudeDir, 'projects');
+      const targetDir = path.join(projectsDir, newSlug);
+      if (!fs.existsSync(targetDir)) {
+        fs.mkdirSync(targetDir, { recursive: true });
+      }
+
+      const baseName = path.basename(filePath); // <uuid>.jsonl
+      const destFile = path.join(targetDir, baseName);
+      if (fs.existsSync(destFile)) {
+        console.error('[FileService] migrate: destination already exists:', destFile);
+        return false;
+      }
+
+      // 1. Move session file + its subagents directory (if any)
+      fs.renameSync(filePath, destFile);
+      const oldDir = filePath.replace(/\.jsonl$/, '');
+      const destDir = destFile.replace(/\.jsonl$/, '');
+      if (fs.existsSync(oldDir) && fs.statSync(oldDir).isDirectory()) {
+        fs.renameSync(oldDir, destDir);
+      }
+
+      // 2. Rewrite cwd inside the moved JSONL(s)
+      this.rewriteCwd(destFile, oldProjectPath, target);
+      if (fs.existsSync(destDir)) {
+        for (const f of fs.readdirSync(destDir).filter(f => f.endsWith('.jsonl'))) {
+          this.rewriteCwd(path.join(destDir, f), oldProjectPath, target);
+        }
+      }
+
+      // 3. Sync history.jsonl project entries
+      this.updateHistoryProject(sessionId, target);
+
+      // 4. Sync sessions/*.json metadata cwd
+      this.updateSessionMetaCwd(sessionId, oldProjectPath, target);
+
+      console.log('[FileService] migrate OK:', oldProjectPath, '->', target);
+      return true;
+    } catch (err) {
+      console.error('[FileService] migrate failed:', err);
+      return false;
+    }
+  }
+
+  /** Read the first non-empty top-level `cwd` from a session JSONL */
+  private findActualCwd(filePath: string): string | null {
+    try {
+      const content = fs.readFileSync(filePath, 'utf-8');
+      for (const line of content.split('\n')) {
+        if (!line.trim()) continue;
+        try {
+          const obj = JSON.parse(line);
+          if (typeof obj.cwd === 'string' && obj.cwd.trim()) return obj.cwd;
+        } catch { /* skip */ }
+      }
+    } catch { /* ignore */ }
+    return null;
+  }
+
+  /** Rewrite the top-level `cwd` field (case-insensitive path match) in a JSONL file */
+  private rewriteCwd(filePath: string, oldPath: string, newPath: string): void {
+    const content = fs.readFileSync(filePath, 'utf-8');
+    const normOld = oldPath.toLowerCase();
+    const out = content.split('\n').map(line => {
+      if (!line.trim()) return line;
+      try {
+        const obj = JSON.parse(line);
+        if (typeof obj.cwd === 'string' && obj.cwd.toLowerCase() === normOld) {
+          obj.cwd = newPath;
+          return JSON.stringify(obj);
+        }
+        return line;
+      } catch {
+        return line;
+      }
+    });
+    fs.writeFileSync(filePath, out.join('\n'), 'utf-8');
+  }
+
+  /** Update project entries in history.jsonl for a session */
+  private updateHistoryProject(sessionId: string, newProject: string): void {
+    const historyPath = path.join(this.claudeDir, 'history.jsonl');
+    if (!fs.existsSync(historyPath)) return;
+    const content = fs.readFileSync(historyPath, 'utf-8');
+    const out = content.split('\n').map(line => {
+      if (!line.trim()) return line;
+      try {
+        const entry = JSON.parse(line);
+        if (entry.sessionId === sessionId) {
+          entry.project = newProject;
+          return JSON.stringify(entry);
+        }
+        return line;
+      } catch {
+        return line;
+      }
+    });
+    fs.writeFileSync(historyPath, out.join('\n'), 'utf-8');
+  }
+
+  /** Update cwd in sessions/*.json metadata for a session */
+  private updateSessionMetaCwd(sessionId: string, oldPath: string, newPath: string): void {
+    const sessionsDir = path.join(this.claudeDir, 'sessions');
+    if (!fs.existsSync(sessionsDir)) return;
+    const normOld = oldPath.toLowerCase();
+    for (const file of fs.readdirSync(sessionsDir).filter(f => f.endsWith('.json'))) {
+      const filePath = path.join(sessionsDir, file);
+      try {
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        if (data.sessionId === sessionId && typeof data.cwd === 'string' && data.cwd.toLowerCase() === normOld) {
+          data.cwd = newPath;
+          fs.writeFileSync(filePath, JSON.stringify(data), 'utf-8');
+        }
+      } catch { /* skip */ }
+    }
+  }
 
   async deleteSessionFile(sessionId: string): Promise<boolean> {
     const filePath = this.getSessionFilePath(sessionId);

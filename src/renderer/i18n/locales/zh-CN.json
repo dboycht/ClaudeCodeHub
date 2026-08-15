@@ -53,7 +53,12 @@
     "noDetail": "未选择对话",
     "noDetailDesc": "点击列表中的对话查看详情",
     "showAllMessages": "显示全部 {{count}} 条消息",
-    "collapseMessages": "显示全部 {{count}} 条消息 — 点击收起"
+    "collapseMessages": "显示全部 {{count}} 条消息 — 点击收起",
+    "migrate": "迁移",
+    "migrateTitle": "迁移此对话到另一个项目目录，Claude Code /resume 中可见",
+    "migrateConfirm": "将对话迁移到目标项目？迁移后原项目中将不再显示此对话",
+    "migrateSuccess": "迁移成功！对话已可在新项目的 /resume 中看到",
+    "migrateFail": "迁移失败"
   },
   "batch": {
     "selectedCount": "已选 {{count}} 项 —",
@@ -117,7 +122,7 @@
     },
     "about": {
       "title": "关于 ClaudeCode Hub",
-      "version": "版本 1.00.2",
+      "version": "版本 1.00.3",
       "author": "作者：dboycht",
       "repo": "项目地址",
       "description": "一个 Windows 11 风格的桌面应用，用于管理 Claude Code 对话记录。支持重命名、删除、备份、导出、导入以及颜色标签分类。",

@@ -168,6 +168,10 @@ export class ConversationService {
     }
   }
 
+  async migrateConversation(id: string, targetProject: string): Promise<boolean> {
+    return this.fileService.migrateSession(id, targetProject);
+  }
+
   async setColor(id: string, color: string | null): Promise<boolean> {
     try {
       this.fileService.updateMetadata(id, { color: color as any });

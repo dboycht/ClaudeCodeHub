@@ -1,6 +1,6 @@
 {
   "name": "claudecode-hub",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "ClaudeCode Hub - A Windows 11-styled desktop app for managing Claude Code conversations",
   "main": "dist/main/index.js",
   "author": "Claude Code Manager",

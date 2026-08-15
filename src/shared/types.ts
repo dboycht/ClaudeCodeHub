@@ -95,6 +95,7 @@ export interface IpcAPI {
     delete: (id: string) => Promise<boolean>;
     toggleStar: (id: string) => Promise<boolean>;
     setColor: (id: string, color: string | null) => Promise<boolean>;
+    migrate: (id: string, targetProject: string) => Promise<boolean>;
     addTag: (id: string, tag: string) => Promise<boolean>;
     removeTag: (id: string, tag: string) => Promise<boolean>;
   };
